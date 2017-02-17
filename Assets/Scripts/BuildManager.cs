@@ -21,11 +21,15 @@ public class BuildManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        turretToBuild = standardTurretPrefab;
+       // turretToBuild = standardTurretPrefab;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    public void SetTurretoBuild(GameObject turret) {
+        turretToBuild = turret;
+    }
 }
