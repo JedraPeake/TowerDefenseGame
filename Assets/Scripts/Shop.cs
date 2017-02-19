@@ -9,8 +9,15 @@ public class Shop : MonoBehaviour {
         Debug.Log("Standard Turret Selected");
         buildmanager.SetTurretoBuild(buildmanager.standardTurretPrefab);
     }
-	// Use this for initialization
-	void Start () {
+
+    public void PurchaseMissleLauncher()
+    {
+        Debug.Log("Missle Launcher Selected");
+        buildmanager.SetTurretoBuild(buildmanager.missileLauncherPrefab);
+    }
+
+    // Use this for initialization
+    void Start () {
         buildmanager = BuildManager.instance;
 	}
 	
