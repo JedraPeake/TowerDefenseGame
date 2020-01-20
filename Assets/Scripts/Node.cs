@@ -5,57 +5,60 @@ using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour {
 
-    public Color hoverColor;
-    private Renderer rend;
-    private Color startColor;
-    private GameObject turret;
-    public Vector3 positionOffset;
+	public Color hoverColor;
+	public Vector3 positionOffset;
 
-    BuildManager buildmanager;
+	[Header("Optional")]
+	public GameObject turret;
 
-    void OnMouseEnter() {
-        if (EventSystem.current.IsPointerOverGameObject()) {
-            return;
-        }
-        if (buildmanager.GetTurretToBuild() == null)
-        {
-            return;
-        }
-        rend.material.color = hoverColor;
-    }
+	private Renderer rend;
+	private Color startColor;
 
-    void OnMouseDown() {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-        if (buildmanager.GetTurretToBuild() == null) {
-            return;
-        }
-        if (turret != null) {
-            Debug.Log("Can't build there- TODO DISPLAY ON SCREEN");
-            return;
-        }
+	BuildManager buildManager;
 
-        GameObject turretToBuild = buildmanager.GetTurretToBuild();
-        turret = (GameObject)Instantiate(turretToBuild, transform.position + positionOffset, transform.rotation);
+	void Start()
+	{
+		rend = GetComponent<Renderer>();
+		startColor = rend.material.color;
 
-    }
+		buildManager = BuildManager.instance;
+	}
 
-    void OnMouseExit()
-    {
-        rend.material.color = startColor;
-    }
+	public Vector3 GetBuildPosition()
+	{
+		return transform.position + positionOffset;
+	}
 
-    // Use this for initialization
-    void Start () {
-        buildmanager = BuildManager.instance;
-        rend = GetComponent < Renderer >();
-        startColor = rend.material.color;
-    }
-	
-	// Update is called once per frame
-	void Update () {
-	
+	void OnMouseDown()
+	{
+		if (EventSystem.current.IsPointerOverGameObject())
+			return;
+
+		if (!buildManager.CanBuild)
+			return;
+
+		if (turret != null)
+		{
+			Debug.Log("Can't build there! - TODO: Display on screen.");
+			return;
+		}
+
+		buildManager.BuildTurretOn(this);
+	}
+
+	void OnMouseEnter()
+	{
+		if (EventSystem.current.IsPointerOverGameObject())
+			return;
+
+		if (!buildManager.CanBuild)
+			return;
+
+		rend.material.color = hoverColor;
+	}
+
+	void OnMouseExit()
+	{
+		rend.material.color = startColor;
 	}
 }

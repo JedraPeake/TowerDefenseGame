@@ -2,37 +2,72 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-	public float speed = 10f;
+	public float Startspeed = 10f;
+	public float speed;
+	GameController GameControllerScript;
 
 	private Transform target;
-	private int wavepointIndex = 0;
+	Transform[] wayPoints;
+	private int currentWavePointIndex = 0;
+	public int hits;
 
 	void Start ()
 	{
-		target = Waypoints.points[0];
+		GameObject g = GameObject.FindGameObjectWithTag("MainCamera");
+		GameControllerScript = g.GetComponent<GameController>();
+
+		speed = Startspeed;
 	}
 
 	void Update ()
 	{
+		moveTowardsNextWaypoint();
+	}
+
+	void moveTowardsNextWaypoint()
+	{
+		if (target == null)
+		{
+			Transform[] temp = GameControllerScript.GetWayPoints();
+			target = temp[0];
+			wayPoints = temp;
+		}
+
 		Vector3 dir = target.position - transform.position;
 		transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
 
-		if (Vector3.Distance(transform.position, target.position) <= 0.4f)
+		if (Vector3.Distance(transform.position, target.position) <= 0.2f)
 		{
-			GetNextWaypoint();
+
+			if (currentWavePointIndex > wayPoints.Length)
+			{
+				GameControllerScript.removeLive(hits);
+				Destroy(gameObject);
+			}
+			else
+			{
+				currentWavePointIndex++;
+				target = wayPoints[currentWavePointIndex];
+			}
 		}
+
+		speed = Startspeed;
 	}
 
-	void GetNextWaypoint()
+	public void ImHit()
 	{
-		if (wavepointIndex >= Waypoints.points.Length - 1)
+		hits--;
+
+		if (hits <= 0)
 		{
 			Destroy(gameObject);
-			return;
 		}
 
-		wavepointIndex++;
-		target = Waypoints.points[wavepointIndex];
+		GameControllerScript.addMoney();
 	}
 
+	public void Slow()
+	{
+		speed = 5f;
+	}
 }

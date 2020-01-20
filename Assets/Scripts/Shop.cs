@@ -1,28 +1,42 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 public class Shop : MonoBehaviour {
 
-    BuildManager buildmanager;
+	public TurretBlueprint standardTurret;
+	public TurretBlueprint missileLauncher;
+	public TurretBlueprint laserBeamer;
 
-    public void PurchaseStanardTurret() {
-        Debug.Log("Standard Turret Selected");
-        buildmanager.SetTurretoBuild(buildmanager.standardTurretPrefab);
-    }
+	BuildManager buildManager;
 
-    public void PurchaseMissleLauncher()
-    {
-        Debug.Log("Missle Launcher Selected");
-        buildmanager.SetTurretoBuild(buildmanager.missileLauncherPrefab);
-    }
-
-    // Use this for initialization
-    void Start () {
-        buildmanager = BuildManager.instance;
+	void Start()
+	{
+		buildManager = BuildManager.instance;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void SelectStandardTurret()
+	{
+		Debug.Log("Standard Turret Selected");
+		buildManager.SelectTurretToBuild(standardTurret);
 	}
+
+	public void SelectMissileLauncher()
+	{
+		Debug.Log("Missile Launcher Selected");
+		buildManager.SelectTurretToBuild(missileLauncher);
+	}
+
+	public void SelectLaserBeamer()
+	{
+		Debug.Log("Laser Beamer Selected");
+		buildManager.SelectTurretToBuild(laserBeamer);
+	}
+}
+
+[Serializable]
+public class TurretBlueprint
+{
+	public GameObject prefab;
+	public int cost;
+
 }

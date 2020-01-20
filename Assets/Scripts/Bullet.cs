@@ -13,12 +13,6 @@ public class Bullet : MonoBehaviour {
         target = _target;
     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
 	void Update () {
         if (target == null) {
             Destroy(gameObject);
@@ -53,7 +47,8 @@ public class Bullet : MonoBehaviour {
     }
 
     void Damage(Transform enemy) {
-        Destroy(enemy.gameObject);
+		Enemy e = enemy.GetComponent<Enemy>();
+		e.ImHit();
     }
 
     void Explode() {
